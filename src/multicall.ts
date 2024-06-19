@@ -2,6 +2,7 @@ import { Contract } from '@ethersproject/contracts';
 import { BaseProvider } from '@ethersproject/providers';
 import { Pools, Pool, SubGraphPools, Token } from './types';
 import * as bmath from './bmath';
+import { defaultAbiCoder } from '@ethersproject/abi';
 
 export async function getAllPoolDataOnChain(
     pools: SubGraphPools,
@@ -27,7 +28,11 @@ export async function getAllPoolDataOnChain(
         });
     }
 
-    let results = await contract.getPoolInfo(addresses, total);
+    const encodedData = defaultAbiCoder.encode(['address[][]'], [addresses]);
+
+    // console.log('encodedData', encodedData);
+
+    let results = await contract.getPoolInfo(encodedData);
 
     let j = 0;
     let onChainPools: Pools = { pools: [] };
