@@ -1,0 +1,232 @@
+{
+    "pools": [
+        {
+            "id": "0x5534055657f2a15e99c1fd2633851180eab9ded6",
+            "swapFee": "0.001",
+            "totalWeight": "11.25",
+            "publicSwap": true,
+            "finalized": false,
+            "tokens": [
+                {
+                    "id": "0x5534055657f2a15e99c1fd2633851180eab9ded6-0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "address": "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R1",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0x5534055657f2a15e99c1fd2633851180eab9ded6-0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "address": "0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R2",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0x5534055657f2a15e99c1fd2633851180eab9ded6-0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "address": "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "balance": "50",
+                    "decimals": 18,
+                    "symbol": "RK",
+                    "denormWeight": "3.75"
+                }
+            ],
+            "tokensList": [
+                "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                "0x3bbb148236abbbb730e4a28d08664c551c34bfbf"
+            ]
+        },
+        {
+            "id": "0x730a3c6f339c8c92d5b91027bb9298a8c321d20e",
+            "swapFee": "0.003",
+            "totalWeight": "11.25",
+            "publicSwap": true,
+            "finalized": false,
+            "tokens": [
+                {
+                    "id": "0x730a3c6f339c8c92d5b91027bb9298a8c321d20e-0x177bf72d4ad8ebd0a2ce23180fed33b94b5ccc25",
+                    "address": "0x177bf72d4ad8ebd0a2ce23180fed33b94b5ccc25",
+                    "balance": "143.336790108854080282",
+                    "decimals": 18,
+                    "symbol": "R2",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0x730a3c6f339c8c92d5b91027bb9298a8c321d20e-0x4b9420e43a9aa972b64bb3ba3b3b56e8aed508de",
+                    "address": "0x4b9420e43a9aa972b64bb3ba3b3b56e8aed508de",
+                    "balance": "47.231593567836311569",
+                    "decimals": 18,
+                    "symbol": "R1",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0x730a3c6f339c8c92d5b91027bb9298a8c321d20e-0x8d9396c9075af8ef45618bcad5bb0130bd1d61d6",
+                    "address": "0x8d9396c9075af8ef45618bcad5bb0130bd1d61d6",
+                    "balance": "74.23708491580282759",
+                    "decimals": 18,
+                    "symbol": "RK",
+                    "denormWeight": "3.75"
+                }
+            ],
+            "tokensList": [
+                "0x8d9396c9075af8ef45618bcad5bb0130bd1d61d6",
+                "0x4b9420e43a9aa972b64bb3ba3b3b56e8aed508de",
+                "0x177bf72d4ad8ebd0a2ce23180fed33b94b5ccc25"
+            ]
+        },
+        {
+            "id": "0x7549c44d3e0fbd5fa3e1a62807682140faa70148",
+            "swapFee": "0.003",
+            "totalWeight": "11.25",
+            "publicSwap": true,
+            "finalized": false,
+            "tokens": [
+                {
+                    "id": "0x7549c44d3e0fbd5fa3e1a62807682140faa70148-0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "address": "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R1",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0x7549c44d3e0fbd5fa3e1a62807682140faa70148-0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "address": "0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R2",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0x7549c44d3e0fbd5fa3e1a62807682140faa70148-0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "address": "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "balance": "50",
+                    "decimals": 18,
+                    "symbol": "RK",
+                    "denormWeight": "3.75"
+                }
+            ],
+            "tokensList": [
+                "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                "0x3bbb148236abbbb730e4a28d08664c551c34bfbf"
+            ]
+        },
+        {
+            "id": "0xc6ab77388087bd96acd8093404d46b659fed6270",
+            "swapFee": "0.003",
+            "totalWeight": "11.25",
+            "publicSwap": true,
+            "finalized": false,
+            "tokens": [
+                {
+                    "id": "0xc6ab77388087bd96acd8093404d46b659fed6270-0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "address": "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R1",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0xc6ab77388087bd96acd8093404d46b659fed6270-0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "address": "0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R2",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0xc6ab77388087bd96acd8093404d46b659fed6270-0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "address": "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "balance": "50",
+                    "decimals": 18,
+                    "symbol": "RK",
+                    "denormWeight": "3.75"
+                }
+            ],
+            "tokensList": [
+                "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                "0x3bbb148236abbbb730e4a28d08664c551c34bfbf"
+            ]
+        },
+        {
+            "id": "0xdd440307ba838272768eedc50875892a74177396",
+            "swapFee": "0.003",
+            "totalWeight": "11.25",
+            "publicSwap": true,
+            "finalized": false,
+            "tokens": [
+                {
+                    "id": "0xdd440307ba838272768eedc50875892a74177396-0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "address": "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R1",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0xdd440307ba838272768eedc50875892a74177396-0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "address": "0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R2",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0xdd440307ba838272768eedc50875892a74177396-0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "address": "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "balance": "50",
+                    "decimals": 18,
+                    "symbol": "RK",
+                    "denormWeight": "3.75"
+                }
+            ],
+            "tokensList": [
+                "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                "0x3bbb148236abbbb730e4a28d08664c551c34bfbf"
+            ]
+        },
+        {
+            "id": "0xf5795ba2f0982b8f519a7635e3c29f22c4ee3ee3",
+            "swapFee": "0.003",
+            "totalWeight": "11.25",
+            "publicSwap": true,
+            "finalized": false,
+            "tokens": [
+                {
+                    "id": "0xf5795ba2f0982b8f519a7635e3c29f22c4ee3ee3-0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "address": "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R1",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0xf5795ba2f0982b8f519a7635e3c29f22c4ee3ee3-0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "address": "0x3bbb148236abbbb730e4a28d08664c551c34bfbf",
+                    "balance": "100",
+                    "decimals": 18,
+                    "symbol": "R2",
+                    "denormWeight": "3.75"
+                },
+                {
+                    "id": "0xf5795ba2f0982b8f519a7635e3c29f22c4ee3ee3-0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "address": "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                    "balance": "50",
+                    "decimals": 18,
+                    "symbol": "RK",
+                    "denormWeight": "3.75"
+                }
+            ],
+            "tokensList": [
+                "0x6031339bf7a13743b4bcdafc45cb59b7ff4d99c1",
+                "0x015ebaf1d1ae6cc12dcf870160f208a64ec29d00",
+                "0x3bbb148236abbbb730e4a28d08664c551c34bfbf"
+            ]
+        }
+    ]
+}
