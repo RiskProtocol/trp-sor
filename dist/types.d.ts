@@ -33,7 +33,7 @@ export interface Price {
     amounts?: BigNumber[];
     bestPathsIds?: string[];
 }
-export declare type Swap = {
+export type Swap = {
     pool: string;
     tokenIn: string;
     tokenOut: string;

@@ -1,5 +1,8 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
+exports.calcTotalReturn = exports.smartOrderRouterMultiHopEpsOfInterest = exports.MAX_UINT = void 0;
+exports.processPaths = processPaths;
+exports.processEpsOfInterestMultiHop = processEpsOfInterestMultiHop;
 const helpers_1 = require('./helpers');
 const bmath_1 = require('./bmath');
 const bignumber_1 = require('./utils/bignumber');
@@ -19,12 +22,12 @@ function processPaths(paths, pools, swapType) {
             let id = `${swap1.pool}${swap1.tokenIn}${swap1.tokenOut}`;
             if (poolPairData[id] === undefined) {
                 let poolSwap1 = pools[swap1.pool];
-                let poolPairDataSwap1 = helpers_1.parsePoolPairData(
+                let poolPairDataSwap1 = (0, helpers_1.parsePoolPairData)(
                     poolSwap1,
                     swap1.tokenIn,
                     swap1.tokenOut
                 );
-                let sp = helpers_1.getSpotPrice(poolPairDataSwap1);
+                let sp = (0, helpers_1.getSpotPrice)(poolPairDataSwap1);
                 poolPairData[id] = { poolPairData: poolPairDataSwap1, sp: sp };
             }
         } else if (swaps.length == 2) {
@@ -32,35 +35,40 @@ function processPaths(paths, pools, swapType) {
             let id = `${swap1.pool}${swap1.tokenIn}${swap1.tokenOut}`;
             if (poolPairData[id] === undefined) {
                 let poolSwap1 = pools[swap1.pool];
-                let poolPairDataSwap1 = helpers_1.parsePoolPairData(
+                let poolPairDataSwap1 = (0, helpers_1.parsePoolPairData)(
                     poolSwap1,
                     swap1.tokenIn,
                     swap1.tokenOut
                 );
-                let sp = helpers_1.getSpotPrice(poolPairDataSwap1);
+                let sp = (0, helpers_1.getSpotPrice)(poolPairDataSwap1);
                 poolPairData[id] = { poolPairData: poolPairDataSwap1, sp: sp };
             }
             let swap2 = swaps[1];
             id = `${swap2.pool}${swap2.tokenIn}${swap2.tokenOut}`;
             if (poolPairData[id] === undefined) {
                 let poolSwap2 = pools[swap2.pool];
-                let poolPairDataSwap2 = helpers_1.parsePoolPairData(
+                let poolPairDataSwap2 = (0, helpers_1.parsePoolPairData)(
                     poolSwap2,
                     swap2.tokenIn,
                     swap2.tokenOut
                 );
-                let sp = helpers_1.getSpotPrice(poolPairDataSwap2);
+                let sp = (0, helpers_1.getSpotPrice)(poolPairDataSwap2);
                 poolPairData[id] = { poolPairData: poolPairDataSwap2, sp: sp };
             }
         }
-        path.spotPrice = helpers_1.getSpotPricePath(pools, path, poolPairData);
-        path.slippage = helpers_1.getSlippageLinearizedSpotPriceAfterSwapPath(
+        path.spotPrice = (0, helpers_1.getSpotPricePath)(
+            pools,
+            path,
+            poolPairData
+        );
+        path.slippage = (0,
+        helpers_1.getSlippageLinearizedSpotPriceAfterSwapPath)(
             pools,
             path,
             swapType,
             poolPairData
         );
-        path.limitAmount = helpers_1.getLimitAmountSwapPath(
+        path.limitAmount = (0, helpers_1.getLimitAmountSwapPath)(
             pools,
             path,
             swapType,
@@ -72,7 +80,6 @@ function processPaths(paths, pools, swapType) {
     });
     return sortedPaths;
 }
-exports.processPaths = processPaths;
 function processEpsOfInterestMultiHop(sortedPaths, swapType, maxPools) {
     // Given sortedPaths, this function builds the list of prices of interest
     // wich is composed of all the spot prices of each of the paths and also
@@ -107,7 +114,6 @@ function processEpsOfInterestMultiHop(sortedPaths, swapType, maxPools) {
     });
     return pricesOfInterest;
 }
-exports.processEpsOfInterestMultiHop = processEpsOfInterestMultiHop;
 /*
 < INPUTS >
 pools: pools information
@@ -126,7 +132,7 @@ swaps: information of the optimal swaps
 bestTotalReturn: amount of tokenOut the swaps will return if swapType == 'swapExactIn'
                 amount of tokenIn the swaps will pull if swapType == 'swapExactOut'
 */
-exports.smartOrderRouterMultiHopEpsOfInterest = (
+const smartOrderRouterMultiHopEpsOfInterest = (
     pools,
     paths,
     swapType,
@@ -184,7 +190,7 @@ exports.smartOrderRouterMultiHopEpsOfInterest = (
             pathIds = [];
             swapAmounts = [];
         }
-        totalReturn = exports.calcTotalReturn(
+        totalReturn = (0, exports.calcTotalReturn)(
             pools,
             paths,
             swapType,
@@ -207,7 +213,7 @@ exports.smartOrderRouterMultiHopEpsOfInterest = (
         if (totalNumberOfPools <= maxPools) {
             if (swapType === 'swapExactIn') {
                 totalReturnConsideringFees = totalReturn.minus(
-                    bmath_1.bmul(
+                    (0, bmath_1.bmul)(
                         new bignumber_1.BigNumber(totalNumberOfPools).times(
                             bmath_1.BONE
                         ),
@@ -220,7 +226,7 @@ exports.smartOrderRouterMultiHopEpsOfInterest = (
                     ) || b === 1; // b === 1 means its the first iteration so bestTotalReturnConsideringFees isn't currently a value
             } else {
                 totalReturnConsideringFees = totalReturn.plus(
-                    bmath_1.bmul(
+                    (0, bmath_1.bmul)(
                         new bignumber_1.BigNumber(totalNumberOfPools).times(
                             bmath_1.BONE
                         ),
@@ -283,14 +289,14 @@ exports.smartOrderRouterMultiHopEpsOfInterest = (
             // Multi-hop:
             let swap1 = path.swaps[0];
             let poolSwap1 = pools[swap1.pool];
-            let poolPairDataSwap1 = helpers_1.parsePoolPairData(
+            let poolPairDataSwap1 = (0, helpers_1.parsePoolPairData)(
                 poolSwap1,
                 swap1.tokenIn,
                 swap1.tokenOut
             );
             let swap2 = path.swaps[1];
             let poolSwap2 = pools[swap2.pool];
-            let poolPairDataSwap2 = helpers_1.parsePoolPairData(
+            let poolPairDataSwap2 = (0, helpers_1.parsePoolPairData)(
                 poolSwap2,
                 swap2.tokenIn,
                 swap2.tokenOut
@@ -303,14 +309,12 @@ exports.smartOrderRouterMultiHopEpsOfInterest = (
                 swapAmount:
                     swapType === 'swapExactIn'
                         ? swapAmount.toString()
-                        : helpers_1
-                              .getReturnAmountSwap(
-                                  pools,
-                                  poolPairDataSwap2,
-                                  swapType,
-                                  swapAmount
-                              )
-                              .toString(),
+                        : (0, helpers_1.getReturnAmountSwap)(
+                              pools,
+                              poolPairDataSwap2,
+                              swapType,
+                              swapAmount
+                          ).toString(),
                 limitReturnAmount:
                     swapType === 'swapExactIn'
                         ? minAmountOut.toString()
@@ -324,14 +328,12 @@ exports.smartOrderRouterMultiHopEpsOfInterest = (
                 tokenOut: path.swaps[1].tokenOut,
                 swapAmount:
                     swapType === 'swapExactIn'
-                        ? helpers_1
-                              .getReturnAmountSwap(
-                                  pools,
-                                  poolPairDataSwap1,
-                                  swapType,
-                                  swapAmount
-                              )
-                              .toString()
+                        ? (0, helpers_1.getReturnAmountSwap)(
+                              pools,
+                              poolPairDataSwap1,
+                              swapType,
+                              swapAmount
+                          ).toString()
                         : swapAmount.toString(),
                 limitReturnAmount:
                     swapType === 'swapExactIn'
@@ -343,7 +345,12 @@ exports.smartOrderRouterMultiHopEpsOfInterest = (
         }
         // Updates the pools in the path with the swaps so that if
         // the new paths use these pools they will have the updated balances
-        helpers_1.getReturnAmountSwapPath(pools, path, swapType, swapAmount);
+        (0, helpers_1.getReturnAmountSwapPath)(
+            pools,
+            path,
+            swapType,
+            swapAmount
+        );
     });
     // Since the individual swapAmounts for each path are integers, the sum of all swapAmounts
     // might not be exactly equal to the totalSwapAmount the user requested. We need to correct that rounding error
@@ -376,6 +383,7 @@ exports.smartOrderRouterMultiHopEpsOfInterest = (
     }
     return [swaps, bestTotalReturn];
 };
+exports.smartOrderRouterMultiHopEpsOfInterest = smartOrderRouterMultiHopEpsOfInterest;
 function getPricesOfInterest(sortedPaths, swapType) {
     let pricesOfInterest = [];
     sortedPaths.forEach((path, i) => {
@@ -387,8 +395,8 @@ function getPricesOfInterest(sortedPaths, swapType) {
         // Get the max amount that can be traded for this path
         pi = {};
         pi.price = path.spotPrice.plus(
-            bmath_1.bmul(
-                bmath_1.bmul(path.limitAmount, path.slippage),
+            (0, bmath_1.bmul)(
+                (0, bmath_1.bmul)(path.limitAmount, path.slippage),
                 path.spotPrice
             )
         );
@@ -400,7 +408,10 @@ function getPricesOfInterest(sortedPaths, swapType) {
         // we have defined the linearized spot price after trade (SPaT) as:
         // SPaT (A) = SP * (1 + SL * A)      so if we want the slope we do:
         // SPaT (A) = SP + SL*SP * A         the slope is therefore SL * SP
-        path.slippagePriceFactor = bmath_1.bmul(path.slippage, path.spotPrice);
+        path.slippagePriceFactor = (0, bmath_1.bmul)(
+            path.slippage,
+            path.spotPrice
+        );
         // Now we have to check if this path we just added will cross with other
         // previously added paths. For that we need to run a for loop with all the
         // previous paths and analyse all the different possibilities of them crossing.
@@ -413,7 +424,7 @@ function getPricesOfInterest(sortedPaths, swapType) {
             // If the slippagePriceFactor of this path is less than that of the
             // previous than they will cross at amountCross:
             if (path.slippagePriceFactor.isLessThan(prevSlippageFactor)) {
-                let amountCross = bmath_1.bdiv(
+                let amountCross = (0, bmath_1.bdiv)(
                     path.spotPrice.minus(prevPath.spotPrice),
                     prevSlippageFactor.minus(path.slippagePriceFactor)
                 );
@@ -424,7 +435,7 @@ function getPricesOfInterest(sortedPaths, swapType) {
                 ) {
                     let epiA = {};
                     epiA.price = path.spotPrice.plus(
-                        bmath_1.bmul(amountCross, path.slippagePriceFactor)
+                        (0, bmath_1.bmul)(amountCross, path.slippagePriceFactor)
                     );
                     // Add price of interest with the information of the paths ids
                     // that are crossing in the format [demoted path, promoted path],
@@ -440,7 +451,7 @@ function getPricesOfInterest(sortedPaths, swapType) {
                 ) {
                     let epiB = {};
                     epiB.price = path.spotPrice.plus(
-                        bmath_1.bmul(
+                        (0, bmath_1.bmul)(
                             prevPath.limitAmount,
                             path.slippagePriceFactor
                         )
@@ -456,7 +467,7 @@ function getPricesOfInterest(sortedPaths, swapType) {
                 ) {
                     let epiC = {};
                     epiC.price = prevPath.spotPrice.plus(
-                        bmath_1.bmul(path.limitAmount, prevSlippageFactor)
+                        (0, bmath_1.bmul)(path.limitAmount, prevSlippageFactor)
                     );
                     // Add cross information similarly to case A above
                     epiC.swap = [path.id, prevPath.id];
@@ -469,7 +480,7 @@ function getPricesOfInterest(sortedPaths, swapType) {
                 if (prevPath.limitAmount.isLessThan(path.limitAmount)) {
                     let epiD = {};
                     epiD.price = path.spotPrice.plus(
-                        bmath_1.bmul(
+                        (0, bmath_1.bmul)(
                             prevPath.limitAmount,
                             path.slippagePriceFactor
                         )
@@ -527,11 +538,11 @@ function getSwapAmountsForPriceOfInterest(paths, pathIds, poi) {
         let path = paths.find(obj => {
             return obj.id === bid;
         });
-        let inputAmount = bmath_1.bdiv(
+        let inputAmount = (0, bmath_1.bdiv)(
             poi.minus(path.spotPrice),
             path.slippagePriceFactor
         );
-        if (inputAmount.isNaN()) inputAmount = bmath_1.bnum(0);
+        if (inputAmount.isNaN()) inputAmount = (0, bmath_1.bnum)(0);
         if (path.limitAmount.isLessThan(inputAmount)) {
             inputAmount = path.limitAmount;
         }
@@ -539,7 +550,7 @@ function getSwapAmountsForPriceOfInterest(paths, pathIds, poi) {
     });
     return swapAmounts;
 }
-exports.calcTotalReturn = (pools, paths, swapType, pathIds, swapAmounts) => {
+const calcTotalReturn = (pools, paths, swapType, pathIds, swapAmounts) => {
     let path;
     let totalReturn = new bignumber_1.BigNumber(0);
     let poolsClone = JSON.parse(JSON.stringify(pools)); // we create a clone to avoid
@@ -549,7 +560,7 @@ exports.calcTotalReturn = (pools, paths, swapType, pathIds, swapAmounts) => {
             return obj.id === b;
         });
         totalReturn = totalReturn.plus(
-            helpers_1.getReturnAmountSwapPath(
+            (0, helpers_1.getReturnAmountSwapPath)(
                 poolsClone,
                 path,
                 swapType,
@@ -559,6 +570,7 @@ exports.calcTotalReturn = (pools, paths, swapType, pathIds, swapAmounts) => {
     });
     return totalReturn;
 };
+exports.calcTotalReturn = calcTotalReturn;
 function getExactSwapAmounts(
     swapAmountsPriceBefore,
     swapAmountsPriceAfter,
@@ -580,11 +592,11 @@ function getExactSwapAmounts(
     let deltaTotalInput = totalInputAfter.minus(totalInputBefore);
     let deltaTimesTarget = [];
     deltaBeforeAfterAmounts.forEach((a, i) => {
-        let ratio = bmath_1.bdiv(
+        let ratio = (0, bmath_1.bdiv)(
             totalSwapAmountWithRoundingErrors.minus(totalInputBefore),
             deltaTotalInput
         );
-        let deltaAmount = bmath_1.bmul(ratio, a);
+        let deltaAmount = (0, bmath_1.bmul)(ratio, a);
         deltaTimesTarget.push(deltaAmount);
     });
     let swapAmounts = [];

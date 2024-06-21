@@ -5,6 +5,20 @@ var __importDefault =
         return mod && mod.__esModule ? mod : { default: mod };
     };
 Object.defineProperty(exports, '__esModule', { value: true });
+exports.formatSubgraphPools = exports.parsePoolPairData = exports.parsePoolData = void 0;
+exports.getLimitAmountSwap = getLimitAmountSwap;
+exports.getLimitAmountSwapPath = getLimitAmountSwapPath;
+exports.getSpotPricePath = getSpotPricePath;
+exports.getSpotPrice = getSpotPrice;
+exports.getSlippageLinearizedSpotPriceAfterSwapPath = getSlippageLinearizedSpotPriceAfterSwapPath;
+exports.getSlippageLinearizedSpotPriceAfterSwap = getSlippageLinearizedSpotPriceAfterSwap;
+exports.getReturnAmountSwapPath = getReturnAmountSwapPath;
+exports.getReturnAmountSwap = getReturnAmountSwap;
+exports.updateTokenBalanceForPool = updateTokenBalanceForPool;
+exports.getNormalizedLiquidity = getNormalizedLiquidity;
+exports.filterPools = filterPools;
+exports.sortPoolsMostLiquid = sortPoolsMostLiquid;
+exports.getMarketSpotPrice = getMarketSpotPrice;
 const bignumber_1 = require('./utils/bignumber');
 const address_1 = require('@ethersproject/address');
 const bmath_1 = require('./bmath');
@@ -13,12 +27,14 @@ const disabled_tokens_json_1 = __importDefault(
 );
 function getLimitAmountSwap(poolPairData, swapType) {
     if (swapType === 'swapExactIn') {
-        return bmath_1.bmul(poolPairData.balanceIn, bmath_1.MAX_IN_RATIO);
+        return (0, bmath_1.bmul)(poolPairData.balanceIn, bmath_1.MAX_IN_RATIO);
     } else {
-        return bmath_1.bmul(poolPairData.balanceOut, bmath_1.MAX_OUT_RATIO);
+        return (0, bmath_1.bmul)(
+            poolPairData.balanceOut,
+            bmath_1.MAX_OUT_RATIO
+        );
     }
 }
-exports.getLimitAmountSwap = getLimitAmountSwap;
 function getLimitAmountSwapPath(pools, path, swapType, poolPairData) {
     let swaps = path.swaps;
     if (swaps.length == 1) {
@@ -34,7 +50,7 @@ function getLimitAmountSwapPath(pools, path, swapType, poolPairData) {
             return bignumber_1.BigNumber.min(
                 // The limit is either set by limit_IN of poolPairData 1 or indirectly by limit_IN of poolPairData 2
                 getLimitAmountSwap(poolPairDataSwap1.poolPairData, swapType),
-                bmath_1.bmul(
+                (0, bmath_1.bmul)(
                     getLimitAmountSwap(
                         poolPairDataSwap2.poolPairData,
                         swapType
@@ -47,7 +63,7 @@ function getLimitAmountSwapPath(pools, path, swapType, poolPairData) {
             return bignumber_1.BigNumber.min(
                 // The limit is either set by limit_OUT of poolPairData 2 or indirectly by limit_OUT of poolPairData 1
                 getLimitAmountSwap(poolPairDataSwap2.poolPairData, swapType),
-                bmath_1.bdiv(
+                (0, bmath_1.bdiv)(
                     getLimitAmountSwap(
                         poolPairDataSwap1.poolPairData,
                         swapType
@@ -61,7 +77,6 @@ function getLimitAmountSwapPath(pools, path, swapType, poolPairData) {
         throw new Error('Path with more than 2 swaps not supported');
     }
 }
-exports.getLimitAmountSwapPath = getLimitAmountSwapPath;
 function getSpotPricePath(pools, path, poolPairData) {
     let swaps = path.swaps;
     if (swaps.length == 1) {
@@ -73,28 +88,29 @@ function getSpotPricePath(pools, path, poolPairData) {
         let poolPairDataSwap1 = poolPairData[id];
         id = `${swaps[1].pool}${swaps[1].tokenIn}${swaps[1].tokenOut}`;
         let poolPairDataSwap2 = poolPairData[id];
-        return bmath_1.bmul(poolPairDataSwap1.sp, poolPairDataSwap2.sp);
+        return (0, bmath_1.bmul)(poolPairDataSwap1.sp, poolPairDataSwap2.sp);
     } else {
         throw new Error('Path with more than 2 swaps not supported');
     }
 }
-exports.getSpotPricePath = getSpotPricePath;
 function getSpotPrice(poolPairData) {
-    let inRatio = bmath_1.bdiv(poolPairData.balanceIn, poolPairData.weightIn);
-    let outRatio = bmath_1.bdiv(
+    let inRatio = (0, bmath_1.bdiv)(
+        poolPairData.balanceIn,
+        poolPairData.weightIn
+    );
+    let outRatio = (0, bmath_1.bdiv)(
         poolPairData.balanceOut,
         poolPairData.weightOut
     );
-    if (outRatio.isEqualTo(bmath_1.bnum(0))) {
-        return bmath_1.bnum(0);
+    if (outRatio.isEqualTo((0, bmath_1.bnum)(0))) {
+        return (0, bmath_1.bnum)(0);
     } else {
-        return bmath_1.bdiv(
-            bmath_1.bdiv(inRatio, outRatio),
+        return (0, bmath_1.bdiv)(
+            (0, bmath_1.bdiv)(inRatio, outRatio),
             bmath_1.BONE.minus(poolPairData.swapFee)
         );
     }
 }
-exports.getSpotPrice = getSpotPrice;
 function getSlippageLinearizedSpotPriceAfterSwapPath(
     pools,
     path,
@@ -115,54 +131,60 @@ function getSlippageLinearizedSpotPriceAfterSwapPath(
         id = `${swaps[1].pool}${swaps[1].tokenIn}${swaps[1].tokenOut}`;
         let p2 = poolPairData[id].poolPairData;
         if (
-            p1.balanceIn.isEqualTo(bmath_1.bnum(0)) ||
-            p2.balanceIn.isEqualTo(bmath_1.bnum(0))
+            p1.balanceIn.isEqualTo((0, bmath_1.bnum)(0)) ||
+            p2.balanceIn.isEqualTo((0, bmath_1.bnum)(0))
         ) {
-            return bmath_1.bnum(0);
+            return (0, bmath_1.bnum)(0);
         } else {
             // Since the numerator is the same for both 'swapExactIn' and 'swapExactOut' we do this first
             // See formulas on https://one.wolframcloud.com/env/fernando.martinel/SOR_multihop_analysis.nb
-            let numerator1 = bmath_1.bmul(
-                bmath_1.bmul(
-                    bmath_1.bmul(
+            let numerator1 = (0, bmath_1.bmul)(
+                (0, bmath_1.bmul)(
+                    (0, bmath_1.bmul)(
                         bmath_1.BONE.minus(p1.swapFee),
                         bmath_1.BONE.minus(p2.swapFee)
                     ), // In mathematica both terms are the negative (which compensates)
                     p1.balanceOut
                 ),
-                bmath_1.bmul(p1.weightIn, p2.weightIn)
+                (0, bmath_1.bmul)(p1.weightIn, p2.weightIn)
             );
-            let numerator2 = bmath_1.bmul(
-                bmath_1.bmul(
+            let numerator2 = (0, bmath_1.bmul)(
+                (0, bmath_1.bmul)(
                     p1.balanceOut.plus(p2.balanceIn),
                     bmath_1.BONE.minus(p1.swapFee) // In mathematica this is the negative but we add (instead of subtracting) numerator2 to compensate
                 ),
-                bmath_1.bmul(p1.weightIn, p2.weightOut)
+                (0, bmath_1.bmul)(p1.weightIn, p2.weightOut)
             );
-            let numerator3 = bmath_1.bmul(
+            let numerator3 = (0, bmath_1.bmul)(
                 p2.balanceIn,
-                bmath_1.bmul(p1.weightOut, p2.weightOut)
+                (0, bmath_1.bmul)(p1.weightOut, p2.weightOut)
             );
             let numerator = numerator1.plus(numerator2).plus(numerator3);
             // The denominator is different for 'swapExactIn' and 'swapExactOut'
             if (swapType === 'swapExactIn') {
-                let denominator1 = bmath_1.bmul(p1.balanceIn, p1.weightOut);
-                let denominator2 = bmath_1.bmul(p2.balanceIn, p2.weightOut);
-                return bmath_1.bdiv(
-                    bmath_1.bdiv(numerator, denominator1),
+                let denominator1 = (0, bmath_1.bmul)(
+                    p1.balanceIn,
+                    p1.weightOut
+                );
+                let denominator2 = (0, bmath_1.bmul)(
+                    p2.balanceIn,
+                    p2.weightOut
+                );
+                return (0, bmath_1.bdiv)(
+                    (0, bmath_1.bdiv)(numerator, denominator1),
                     denominator2
                 );
             } else {
-                let denominator1 = bmath_1.bmul(
+                let denominator1 = (0, bmath_1.bmul)(
                     bmath_1.BONE.minus(p1.swapFee),
-                    bmath_1.bmul(p1.balanceOut, p1.weightIn)
+                    (0, bmath_1.bmul)(p1.balanceOut, p1.weightIn)
                 );
-                let denominator2 = bmath_1.bmul(
+                let denominator2 = (0, bmath_1.bmul)(
                     bmath_1.BONE.minus(p2.swapFee),
-                    bmath_1.bmul(p2.balanceOut, p2.weightIn)
+                    (0, bmath_1.bmul)(p2.balanceOut, p2.weightIn)
                 );
-                return bmath_1.bdiv(
-                    bmath_1.bdiv(numerator, denominator1),
+                return (0, bmath_1.bdiv)(
+                    (0, bmath_1.bdiv)(numerator, denominator1),
                     denominator2
                 );
             }
@@ -171,46 +193,40 @@ function getSlippageLinearizedSpotPriceAfterSwapPath(
         throw new Error('Path with more than 2 swaps not supported');
     }
 }
-exports.getSlippageLinearizedSpotPriceAfterSwapPath = getSlippageLinearizedSpotPriceAfterSwapPath;
 function getSlippageLinearizedSpotPriceAfterSwap(poolPairData, swapType) {
     let { weightIn, weightOut, balanceIn, balanceOut, swapFee } = poolPairData;
     if (swapType === 'swapExactIn') {
-        if (balanceIn.isEqualTo(bmath_1.bnum(0))) {
-            return bmath_1.bnum(0);
+        if (balanceIn.isEqualTo((0, bmath_1.bnum)(0))) {
+            return (0, bmath_1.bnum)(0);
         } else {
-            return bmath_1.bdiv(
-                bmath_1
-                    .bmul(
-                        bmath_1.BONE.minus(swapFee),
-                        bmath_1.bdiv(weightIn, weightOut)
-                    )
-                    .plus(bmath_1.BONE),
+            return (0, bmath_1.bdiv)(
+                (0, bmath_1.bmul)(
+                    bmath_1.BONE.minus(swapFee),
+                    (0, bmath_1.bdiv)(weightIn, weightOut)
+                ).plus(bmath_1.BONE),
                 balanceIn
             );
         }
     } else {
-        if (balanceOut.isEqualTo(bmath_1.bnum(0))) {
-            return bmath_1.bnum(0);
+        if (balanceOut.isEqualTo((0, bmath_1.bnum)(0))) {
+            return (0, bmath_1.bnum)(0);
         } else {
-            return bmath_1.bdiv(
-                bmath_1
-                    .bdiv(
-                        weightOut,
-                        bmath_1.bmul(bmath_1.BONE.minus(swapFee), weightIn)
-                    )
-                    .plus(bmath_1.BONE),
+            return (0, bmath_1.bdiv)(
+                (0, bmath_1.bdiv)(
+                    weightOut,
+                    (0, bmath_1.bmul)(bmath_1.BONE.minus(swapFee), weightIn)
+                ).plus(bmath_1.BONE),
                 balanceOut
             );
         }
     }
 }
-exports.getSlippageLinearizedSpotPriceAfterSwap = getSlippageLinearizedSpotPriceAfterSwap;
 function getReturnAmountSwapPath(pools, path, swapType, amount) {
     let swaps = path.swaps;
     if (swaps.length == 1) {
         let swap1 = swaps[0];
         let poolSwap1 = pools[swap1.pool];
-        let poolPairDataSwap1 = exports.parsePoolPairData(
+        let poolPairDataSwap1 = (0, exports.parsePoolPairData)(
             poolSwap1,
             swap1.tokenIn,
             swap1.tokenOut
@@ -219,14 +235,14 @@ function getReturnAmountSwapPath(pools, path, swapType, amount) {
     } else if (swaps.length == 2) {
         let swap1 = swaps[0];
         let poolSwap1 = pools[swap1.pool];
-        let poolPairDataSwap1 = exports.parsePoolPairData(
+        let poolPairDataSwap1 = (0, exports.parsePoolPairData)(
             poolSwap1,
             swap1.tokenIn,
             swap1.tokenOut
         );
         let swap2 = swaps[1];
         let poolSwap2 = pools[swap2.pool];
-        let poolPairDataSwap2 = exports.parsePoolPairData(
+        let poolPairDataSwap2 = (0, exports.parsePoolPairData)(
             poolSwap2,
             swap2.tokenIn,
             swap2.tokenOut
@@ -264,7 +280,6 @@ function getReturnAmountSwapPath(pools, path, swapType, amount) {
         throw new Error('Path with more than 2 swaps not supported');
     }
 }
-exports.getReturnAmountSwapPath = getReturnAmountSwapPath;
 function getReturnAmountSwap(pools, poolPairData, swapType, amount) {
     let {
         weightIn,
@@ -277,10 +292,10 @@ function getReturnAmountSwap(pools, poolPairData, swapType, amount) {
     } = poolPairData;
     let returnAmount;
     if (swapType === 'swapExactIn') {
-        if (balanceIn.isEqualTo(bmath_1.bnum(0))) {
-            return bmath_1.bnum(0);
+        if (balanceIn.isEqualTo((0, bmath_1.bnum)(0))) {
+            return (0, bmath_1.bnum)(0);
         } else {
-            returnAmount = bmath_1.calcOutGivenIn(
+            returnAmount = (0, bmath_1.calcOutGivenIn)(
                 balanceIn,
                 weightIn,
                 balanceOut,
@@ -302,13 +317,13 @@ function getReturnAmountSwap(pools, poolPairData, swapType, amount) {
             return returnAmount;
         }
     } else {
-        if (balanceOut.isEqualTo(bmath_1.bnum(0))) {
-            return bmath_1.bnum(0);
+        if (balanceOut.isEqualTo((0, bmath_1.bnum)(0))) {
+            return (0, bmath_1.bnum)(0);
         } else if (amount.times(3).gte(balanceOut)) {
             // The maximum amoutOut you can have is 1/3 of the balanceOut to ensure binomial approximation diverges
-            return bmath_1.bnum(0);
+            return (0, bmath_1.bnum)(0);
         } else {
-            returnAmount = bmath_1.calcInGivenOut(
+            returnAmount = (0, bmath_1.calcInGivenOut)(
                 balanceIn,
                 weightIn,
                 balanceOut,
@@ -331,7 +346,6 @@ function getReturnAmountSwap(pools, poolPairData, swapType, amount) {
         }
     }
 }
-exports.getReturnAmountSwap = getReturnAmountSwap;
 // Updates the balance of a given token for a given pool passed as parameter
 function updateTokenBalanceForPool(pool, token, balance) {
     // console.log("pool")
@@ -345,20 +359,18 @@ function updateTokenBalanceForPool(pool, token, balance) {
     T.balance = balance;
     return pool;
 }
-exports.updateTokenBalanceForPool = updateTokenBalanceForPool;
 // Based on the function of same name of file onchain-sor in file: BRegistry.sol
 // Normalized liquidity is not used in any calculationf, but instead for comparison between poolPairDataList only
 // so we can find the most liquid poolPairData considering the effect of uneven weigths
 function getNormalizedLiquidity(poolPairData) {
     let { weightIn, weightOut, balanceIn, balanceOut, swapFee } = poolPairData;
-    return bmath_1.bdiv(
-        bmath_1.bmul(balanceOut, weightIn),
+    return (0, bmath_1.bdiv)(
+        (0, bmath_1.bmul)(balanceOut, weightIn),
         weightIn.plus(weightOut)
     );
 }
-exports.getNormalizedLiquidity = getNormalizedLiquidity;
 // LEGACY FUNCTION - Keep Input/Output Format
-exports.parsePoolData = (
+const parsePoolData = (
     directPools,
     tokenIn,
     tokenOut,
@@ -402,22 +414,27 @@ exports.parsePoolData = (
             tokenOut: tokenOut,
         };
         let path = {
-            id: mostLiquidPoolsFirstHop[i].id + mostLiquidPoolsSecondHop[i].id,
+            id: mostLiquidPoolsFirstHop[i].id + mostLiquidPoolsSecondHop[i].id, // Path id is the concatenation of the ids of poolFirstHop and poolSecondHop
             swaps: [swap1, swap2],
         };
         pathDataList.push(path);
     }
     return [pools, pathDataList];
 };
-exports.parsePoolPairData = (p, tokenIn, tokenOut) => {
+exports.parsePoolData = parsePoolData;
+const parsePoolPairData = (p, tokenIn, tokenOut) => {
     let tI = p.tokens.find(
-        t => address_1.getAddress(t.address) === address_1.getAddress(tokenIn)
+        t =>
+            (0, address_1.getAddress)(t.address) ===
+            (0, address_1.getAddress)(tokenIn)
     );
     // console.log("tI")
     // console.log(tI.balance.toString());
     // console.log(tI)
     let tO = p.tokens.find(
-        t => address_1.getAddress(t.address) === address_1.getAddress(tokenOut)
+        t =>
+            (0, address_1.getAddress)(t.address) ===
+            (0, address_1.getAddress)(tokenOut)
     );
     // console.log("tO")
     // console.log(tO.balance.toString());
@@ -428,20 +445,25 @@ exports.parsePoolPairData = (p, tokenIn, tokenOut) => {
         tokenOut: tokenOut,
         decimalsIn: tI.decimals,
         decimalsOut: tO.decimals,
-        balanceIn: bmath_1.bnum(tI.balance),
-        balanceOut: bmath_1.bnum(tO.balance),
-        weightIn: bmath_1.scale(
-            bmath_1.bnum(tI.denormWeight).div(bmath_1.bnum(p.totalWeight)),
+        balanceIn: (0, bmath_1.bnum)(tI.balance),
+        balanceOut: (0, bmath_1.bnum)(tO.balance),
+        weightIn: (0, bmath_1.scale)(
+            (0, bmath_1.bnum)(tI.denormWeight).div(
+                (0, bmath_1.bnum)(p.totalWeight)
+            ),
             18
         ),
-        weightOut: bmath_1.scale(
-            bmath_1.bnum(tO.denormWeight).div(bmath_1.bnum(p.totalWeight)),
+        weightOut: (0, bmath_1.scale)(
+            (0, bmath_1.bnum)(tO.denormWeight).div(
+                (0, bmath_1.bnum)(p.totalWeight)
+            ),
             18
         ),
-        swapFee: bmath_1.bnum(p.swapFee),
+        swapFee: (0, bmath_1.bnum)(p.swapFee),
     };
     return poolPairData;
 };
+exports.parsePoolPairData = parsePoolPairData;
 function filterPoolsWithoutToken(pools, token) {
     let found;
     let OutputPools = {};
@@ -458,22 +480,26 @@ function filterPoolsWithoutToken(pools, token) {
     }
     return OutputPools;
 }
-exports.formatSubgraphPools = pools => {
+const formatSubgraphPools = pools => {
     for (let pool of pools.pools) {
-        pool.swapFee = bmath_1.scale(bmath_1.bnum(pool.swapFee), 18);
-        pool.totalWeight = bmath_1.scale(bmath_1.bnum(pool.totalWeight), 18);
+        pool.swapFee = (0, bmath_1.scale)((0, bmath_1.bnum)(pool.swapFee), 18);
+        pool.totalWeight = (0, bmath_1.scale)(
+            (0, bmath_1.bnum)(pool.totalWeight),
+            18
+        );
         pool.tokens.forEach(token => {
-            token.balance = bmath_1.scale(
-                bmath_1.bnum(token.balance),
+            token.balance = (0, bmath_1.scale)(
+                (0, bmath_1.bnum)(token.balance),
                 token.decimals
             );
-            token.denormWeight = bmath_1.scale(
-                bmath_1.bnum(token.denormWeight),
+            token.denormWeight = (0, bmath_1.scale)(
+                (0, bmath_1.bnum)(token.denormWeight),
                 18
             );
         });
     }
 };
+exports.formatSubgraphPools = formatSubgraphPools;
 function filterPools(
     allPools, // The complete information of the pools
     tokenIn,
@@ -526,7 +552,6 @@ function filterPools(
     const hopTokens = [...hopTokensSet];
     return [poolsDirect, hopTokens, poolsTokenOne, poolsTokenTwo];
 }
-exports.filterPools = filterPools;
 function sortPoolsMostLiquid(
     tokenIn,
     tokenOut,
@@ -543,7 +568,7 @@ function sortPoolsMostLiquid(
     let mostLiquidPoolsSecondHop = [];
     let poolPair = {}; // Store pair liquidity incase it is reused
     for (let i = 0; i < hopTokens.length; i++) {
-        let highestNormalizedLiquidityFirst = bmath_1.bnum(0); // Aux variable to find pool with most liquidity for pair (tokenIn -> hopToken)
+        let highestNormalizedLiquidityFirst = (0, bmath_1.bnum)(0); // Aux variable to find pool with most liquidity for pair (tokenIn -> hopToken)
         let highestNormalizedLiquidityFirstPoolId; // Aux variable to find pool with most liquidity for pair (tokenIn -> hopToken)
         for (let k in poolsTokenInNoTokenOut) {
             // If this pool has hopTokens[i] calculate its normalized liquidity
@@ -551,7 +576,7 @@ function sortPoolsMostLiquid(
                 new Set(poolsTokenInNoTokenOut[k].tokensList).has(hopTokens[i])
             ) {
                 let normalizedLiquidity = getNormalizedLiquidity(
-                    exports.parsePoolPairData(
+                    (0, exports.parsePoolPairData)(
                         poolsTokenInNoTokenOut[k],
                         tokenIn,
                         hopTokens[i].toString()
@@ -571,7 +596,7 @@ function sortPoolsMostLiquid(
         }
         mostLiquidPoolsFirstHop[i] =
             poolsTokenInNoTokenOut[highestNormalizedLiquidityFirstPoolId];
-        let highestNormalizedLiquidity = bmath_1.bnum(0); // Aux variable to find pool with most liquidity for pair (tokenIn -> hopToken)
+        let highestNormalizedLiquidity = (0, bmath_1.bnum)(0); // Aux variable to find pool with most liquidity for pair (tokenIn -> hopToken)
         let highestNormalizedLiquidityPoolId; // Aux variable to find pool with most liquidity for pair (tokenIn -> hopToken)
         for (let k in poolsTokenOutNoTokenIn) {
             // If this pool has hopTokens[i] calculate its normalized liquidity
@@ -579,7 +604,7 @@ function sortPoolsMostLiquid(
                 new Set(poolsTokenOutNoTokenIn[k].tokensList).has(hopTokens[i])
             ) {
                 let normalizedLiquidity = getNormalizedLiquidity(
-                    exports.parsePoolPairData(
+                    (0, exports.parsePoolPairData)(
                         poolsTokenOutNoTokenIn[k],
                         hopTokens[i].toString(),
                         tokenOut
@@ -602,18 +627,16 @@ function sortPoolsMostLiquid(
     }
     return [mostLiquidPoolsFirstHop, mostLiquidPoolsSecondHop];
 }
-exports.sortPoolsMostLiquid = sortPoolsMostLiquid;
 function getMarketSpotPrice(paths) {
-    if (paths.length === 0) return bmath_1.bnum(0);
-    let min = bmath_1.bnum(paths[0].slippage);
-    let marketSp = bmath_1.bnum(paths[0].spotPrice);
+    if (paths.length === 0) return (0, bmath_1.bnum)(0);
+    let min = (0, bmath_1.bnum)(paths[0].slippage);
+    let marketSp = (0, bmath_1.bnum)(paths[0].spotPrice);
     for (let i = 1; i < paths.length; i++) {
-        let value = bmath_1.bnum(paths[i].slippage);
+        let value = (0, bmath_1.bnum)(paths[i].slippage);
         if (value.lt(min) || min.eq(0)) {
             min = value;
-            marketSp = bmath_1.bnum(paths[i].spotPrice);
+            marketSp = (0, bmath_1.bnum)(paths[i].spotPrice);
         }
     }
     return marketSp;
 }
-exports.getMarketSpotPrice = getMarketSpotPrice;

@@ -35,6 +35,11 @@ var __awaiter =
         });
     };
 Object.defineProperty(exports, '__esModule', { value: true });
+exports.getAddress = getAddress;
+exports.getOnChainReserves = getOnChainReserves;
+exports.getTokenWeiPrice = getTokenWeiPrice;
+exports.calculateTotalSwapCost = calculateTotalSwapCost;
+exports.getCostOutputToken = getCostOutputToken;
 const address_1 = require('@ethersproject/address');
 const contracts_1 = require('@ethersproject/contracts');
 const solidity_1 = require('@ethersproject/solidity');
@@ -48,17 +53,21 @@ function getAddress(tokenA, tokenB) {
         tokenA.toLowerCase() < tokenB.toLowerCase()
             ? [tokenA, tokenB]
             : [tokenB, tokenA];
-    let address = address_1.getCreate2Address(
+    let address = (0, address_1.getCreate2Address)(
         FACTORY_ADDRESS,
-        solidity_1.keccak256(
+        (0, solidity_1.keccak256)(
             ['bytes'],
-            [solidity_1.pack(['address', 'address'], [tokens[0], tokens[1]])]
+            [
+                (0, solidity_1.pack)(
+                    ['address', 'address'],
+                    [tokens[0], tokens[1]]
+                ),
+            ]
         ),
         INIT_CODE_HASH
     );
     return address;
 }
-exports.getAddress = getAddress;
 function getOnChainReserves(PairAddr, provider) {
     return __awaiter(this, void 0, void 0, function*() {
         const uniswapV2PairAbi = require('./abi/UniswapV2Pair.json');
@@ -75,7 +84,6 @@ function getOnChainReserves(PairAddr, provider) {
         return [reserve0, reserve1];
     });
 }
-exports.getOnChainReserves = getOnChainReserves;
 function getTokenWeiPrice(TokenAddr, provider) {
     return __awaiter(this, void 0, void 0, function*() {
         const WETH = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
@@ -89,21 +97,24 @@ function getTokenWeiPrice(TokenAddr, provider) {
         return price1eth.times(bmath_1.BONE);
     });
 }
-exports.getTokenWeiPrice = getTokenWeiPrice;
 function calculateTotalSwapCost(TokenPrice, SwapCost, GasPriceWei) {
     return GasPriceWei.times(SwapCost)
         .times(TokenPrice)
         .div(bmath_1.BONE);
 }
-exports.calculateTotalSwapCost = calculateTotalSwapCost;
 function getCostOutputToken(
-    TokenAddr,
-    GasPriceWei,
-    SwapGasCost,
-    Provider,
-    ChainId = undefined
+    TokenAddr_1,
+    GasPriceWei_1,
+    SwapGasCost_1,
+    Provider_1
 ) {
-    return __awaiter(this, void 0, void 0, function*() {
+    return __awaiter(this, arguments, void 0, function*(
+        TokenAddr,
+        GasPriceWei,
+        SwapGasCost,
+        Provider,
+        ChainId = undefined
+    ) {
         if (!ChainId) {
             let network = yield Provider.getNetwork();
             ChainId = network.chainId;
@@ -127,4 +138,3 @@ function getCostOutputToken(
         return costOutputToken;
     });
 }
-exports.getCostOutputToken = getCostOutputToken;
