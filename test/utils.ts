@@ -11,7 +11,7 @@ import {
     BONE,
 } from '../src/bmath';
 import { expect, assert } from 'chai';
-import { getAddress } from '@ethersproject/address';
+import { getAddress } from 'ethers';
 
 export function getAmountOut(
     Pools,

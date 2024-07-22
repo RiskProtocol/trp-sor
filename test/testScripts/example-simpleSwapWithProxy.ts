@@ -2,10 +2,10 @@
 require('dotenv').config();
 const sor = require('../../src');
 import { BigNumber } from 'bignumber.js';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { Wallet } from '@ethersproject/wallet';
-import { MaxUint256 } from '@ethersproject/constants';
-import { Contract } from '@ethersproject/contracts';
+import { JsonRpcProvider } from 'ethers';
+import { Wallet } from 'ethers';
+import { MaxUint256 } from 'ethers';
+import { Contract } from 'ethers';
 
 async function makeSwap() {
     // If running this example make sure you have a .env file saved in root DIR with INFURA=your_key, KEY=pk_of_wallet_to_swap_with

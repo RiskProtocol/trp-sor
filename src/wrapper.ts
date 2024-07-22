@@ -1,4 +1,5 @@
-import { BaseProvider } from '@ethersproject/providers';
+// import { BaseProvider } from '@ethersproject/providers';
+import { Provider } from 'ethers';
 import { BigNumber } from './utils/bignumber';
 import {
     SubGraphPool,
@@ -13,7 +14,7 @@ import { bnum, scale } from './bmath';
 import * as sor from './index';
 
 export class SOR {
-    provider: BaseProvider;
+    provider: Provider;
     gasPrice: BigNumber;
     maxPools: number;
     chainId: number;
@@ -34,7 +35,7 @@ export class SOR {
     };
 
     constructor(
-        Provider: BaseProvider,
+        Provider: Provider,
         GasPrice: BigNumber,
         MaxPools: number,
         ChainId: number,

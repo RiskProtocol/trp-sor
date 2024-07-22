@@ -1,13 +1,16 @@
-import { Contract } from '@ethersproject/contracts';
-import { BaseProvider } from '@ethersproject/providers';
+// import { Contract } from '@ethersproject/contracts';
+// import { BaseProvider } from '@ethersproject/providers';
+import { Provider, Contract, AbiCoder } from 'ethers';
+
 import { Pools, Pool, SubGraphPools, Token } from './types';
 import * as bmath from './bmath';
-import { defaultAbiCoder } from '@ethersproject/abi';
+// import { AbiCoder } from '@ethersproject/abi';
+// import { defaultAbiCoder } from '@ethersproject/abi';
 
 export async function getAllPoolDataOnChain(
     pools: SubGraphPools,
     multiAddress: string,
-    provider: BaseProvider
+    provider: Provider
 ): Promise<Pools> {
     if (pools.pools.length === 0) throw Error('There are no pools.');
 
@@ -28,7 +31,10 @@ export async function getAllPoolDataOnChain(
         });
     }
 
-    const encodedData = defaultAbiCoder.encode(['address[][]'], [addresses]);
+    const encodedData = AbiCoder.defaultAbiCoder().encode(
+        ['address[][]'],
+        [addresses]
+    );
 
     // console.log('encodedData', encodedData);
 

@@ -1,4 +1,56 @@
 'use strict';
+var __createBinding =
+    (this && this.__createBinding) ||
+    (Object.create
+        ? function(o, m, k, k2) {
+              if (k2 === undefined) k2 = k;
+              var desc = Object.getOwnPropertyDescriptor(m, k);
+              if (
+                  !desc ||
+                  ('get' in desc
+                      ? !m.__esModule
+                      : desc.writable || desc.configurable)
+              ) {
+                  desc = {
+                      enumerable: true,
+                      get: function() {
+                          return m[k];
+                      },
+                  };
+              }
+              Object.defineProperty(o, k2, desc);
+          }
+        : function(o, m, k, k2) {
+              if (k2 === undefined) k2 = k;
+              o[k2] = m[k];
+          });
+var __setModuleDefault =
+    (this && this.__setModuleDefault) ||
+    (Object.create
+        ? function(o, v) {
+              Object.defineProperty(o, 'default', {
+                  enumerable: true,
+                  value: v,
+              });
+          }
+        : function(o, v) {
+              o['default'] = v;
+          });
+var __importStar =
+    (this && this.__importStar) ||
+    function(mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null)
+            for (var k in mod)
+                if (
+                    k !== 'default' &&
+                    Object.prototype.hasOwnProperty.call(mod, k)
+                )
+                    __createBinding(result, mod, k);
+        __setModuleDefault(result, mod);
+        return result;
+    };
 var __awaiter =
     (this && this.__awaiter) ||
     function(thisArg, _arguments, P, generator) {
@@ -34,18 +86,8 @@ var __awaiter =
             );
         });
     };
-var __importStar =
-    (this && this.__importStar) ||
-    function(mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null)
-            for (var k in mod)
-                if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-        result['default'] = mod;
-        return result;
-    };
 Object.defineProperty(exports, '__esModule', { value: true });
+exports.SOR = void 0;
 const bignumber_1 = require('./utils/bignumber');
 const bmath_1 = require('./bmath');
 const sor = __importStar(require('./index'));
@@ -73,8 +115,11 @@ class SOR {
     /*
     Find and cache cost of token.
     */
-    setCostOutputToken(TokenOut, Cost = null) {
-        return __awaiter(this, void 0, void 0, function*() {
+    setCostOutputToken(TokenOut_1) {
+        return __awaiter(this, arguments, void 0, function*(
+            TokenOut,
+            Cost = null
+        ) {
             TokenOut = TokenOut.toLowerCase();
             if (Cost === null) {
                 // This calculates the cost to make a swap which is used as an input to SOR to allow it to make gas efficient recommendations
@@ -156,7 +201,7 @@ class SOR {
             } else {
                 // Haven't retrieved all pools/balances so we use the pools for pairs if previously fetched
                 if (!this.poolsForPairsCache[this.createKey(TokenIn, TokenOut)])
-                    return [[[]], bmath_1.bnum(0), bmath_1.bnum(0)];
+                    return [[[]], (0, bmath_1.bnum)(0), (0, bmath_1.bnum)(0)];
                 [swaps, total, marketSp] = yield this.processSwaps(
                     TokenIn,
                     TokenOut,
@@ -171,17 +216,17 @@ class SOR {
     }
     // Will process swap/pools data and return best swaps
     // UserProcessCache can be false to force fresh processing of paths/prices
-    processSwaps(
-        TokenIn,
-        TokenOut,
-        SwapType,
-        SwapAmt,
-        OnChainPools,
-        UserProcessCache = true
-    ) {
-        return __awaiter(this, void 0, void 0, function*() {
+    processSwaps(TokenIn_1, TokenOut_1, SwapType_1, SwapAmt_1, OnChainPools_1) {
+        return __awaiter(this, arguments, void 0, function*(
+            TokenIn,
+            TokenOut,
+            SwapType,
+            SwapAmt,
+            OnChainPools,
+            UserProcessCache = true
+        ) {
             if (OnChainPools.pools.length === 0)
-                return [[[]], bmath_1.bnum(0), bmath_1.bnum(0)];
+                return [[[]], (0, bmath_1.bnum)(0), (0, bmath_1.bnum)(0)];
             let pools, paths, epsOfInterest, marketSp;
             // If token pair has been processed before that info can be reused to speed up execution
             let cache = this.processedDataCache[
@@ -308,19 +353,19 @@ class SOR {
                 }
                 let allSwaps = [];
                 let range = [
-                    bmath_1.bnum('0.01'),
-                    bmath_1.bnum('0.1'),
-                    bmath_1.bnum('1'),
-                    bmath_1.bnum('10'),
-                    bmath_1.bnum('100'),
-                    bmath_1.bnum('1000'),
+                    (0, bmath_1.bnum)('0.01'),
+                    (0, bmath_1.bnum)('0.1'),
+                    (0, bmath_1.bnum)('1'),
+                    (0, bmath_1.bnum)('10'),
+                    (0, bmath_1.bnum)('100'),
+                    (0, bmath_1.bnum)('1000'),
                 ];
                 // Calculate swaps for swapExactIn/Out over range and save swaps (with pools) returned
                 range.forEach(amt => {
-                    let amtIn = bmath_1.scale(amt, decimalsIn);
+                    let amtIn = (0, bmath_1.scale)(amt, decimalsIn);
                     let amtOut = amtIn;
                     if (decimalsIn !== decimalsOut)
-                        amtOut = bmath_1.scale(amt, decimalsOut);
+                        amtOut = (0, bmath_1.scale)(amt, decimalsOut);
                     let swaps, total;
                     [swaps, total] = sor.smartOrderRouterMultiHopEpsOfInterest(
                         JSON.parse(JSON.stringify(pools)), // Need to keep original pools

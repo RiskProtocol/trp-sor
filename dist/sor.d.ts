@@ -1,6 +1,6 @@
 import { BigNumber } from './utils/bignumber';
 import { Path, Swap, EffectivePrice, PoolDictionary } from './types';
-export declare const MAX_UINT: import('@ethersproject/bignumber').BigNumber;
+export declare const MAX_UINT: bigint;
 export declare function processPaths(
     paths: Path[],
     pools: PoolDictionary,

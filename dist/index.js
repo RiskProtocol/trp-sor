@@ -1,4 +1,41 @@
 'use strict';
+var __createBinding =
+    (this && this.__createBinding) ||
+    (Object.create
+        ? function(o, m, k, k2) {
+              if (k2 === undefined) k2 = k;
+              var desc = Object.getOwnPropertyDescriptor(m, k);
+              if (
+                  !desc ||
+                  ('get' in desc
+                      ? !m.__esModule
+                      : desc.writable || desc.configurable)
+              ) {
+                  desc = {
+                      enumerable: true,
+                      get: function() {
+                          return m[k];
+                      },
+                  };
+              }
+              Object.defineProperty(o, k2, desc);
+          }
+        : function(o, m, k, k2) {
+              if (k2 === undefined) k2 = k;
+              o[k2] = m[k];
+          });
+var __setModuleDefault =
+    (this && this.__setModuleDefault) ||
+    (Object.create
+        ? function(o, v) {
+              Object.defineProperty(o, 'default', {
+                  enumerable: true,
+                  value: v,
+              });
+          }
+        : function(o, v) {
+              o['default'] = v;
+          });
 var __importStar =
     (this && this.__importStar) ||
     function(mod) {
@@ -6,29 +43,93 @@ var __importStar =
         var result = {};
         if (mod != null)
             for (var k in mod)
-                if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-        result['default'] = mod;
+                if (
+                    k !== 'default' &&
+                    Object.prototype.hasOwnProperty.call(mod, k)
+                )
+                    __createBinding(result, mod, k);
+        __setModuleDefault(result, mod);
         return result;
     };
 Object.defineProperty(exports, '__esModule', { value: true });
+exports.SOR = exports.POOLS = exports.getCostOutputToken = exports.bmath = exports.getAllPoolDataOnChain = exports.getMarketSpotPrice = exports.sortPoolsMostLiquid = exports.filterPools = exports.formatSubgraphPools = exports.parsePoolData = exports.processEpsOfInterestMultiHop = exports.processPaths = exports.smartOrderRouterMultiHopEpsOfInterest = void 0;
 var sor_1 = require('./sor');
-exports.smartOrderRouterMultiHopEpsOfInterest =
-    sor_1.smartOrderRouterMultiHopEpsOfInterest;
-exports.processPaths = sor_1.processPaths;
-exports.processEpsOfInterestMultiHop = sor_1.processEpsOfInterestMultiHop;
+Object.defineProperty(exports, 'smartOrderRouterMultiHopEpsOfInterest', {
+    enumerable: true,
+    get: function() {
+        return sor_1.smartOrderRouterMultiHopEpsOfInterest;
+    },
+});
+Object.defineProperty(exports, 'processPaths', {
+    enumerable: true,
+    get: function() {
+        return sor_1.processPaths;
+    },
+});
+Object.defineProperty(exports, 'processEpsOfInterestMultiHop', {
+    enumerable: true,
+    get: function() {
+        return sor_1.processEpsOfInterestMultiHop;
+    },
+});
 var helpers_1 = require('./helpers');
-exports.parsePoolData = helpers_1.parsePoolData;
-exports.formatSubgraphPools = helpers_1.formatSubgraphPools;
-exports.filterPools = helpers_1.filterPools;
-exports.sortPoolsMostLiquid = helpers_1.sortPoolsMostLiquid;
-exports.getMarketSpotPrice = helpers_1.getMarketSpotPrice;
+Object.defineProperty(exports, 'parsePoolData', {
+    enumerable: true,
+    get: function() {
+        return helpers_1.parsePoolData;
+    },
+});
+Object.defineProperty(exports, 'formatSubgraphPools', {
+    enumerable: true,
+    get: function() {
+        return helpers_1.formatSubgraphPools;
+    },
+});
+Object.defineProperty(exports, 'filterPools', {
+    enumerable: true,
+    get: function() {
+        return helpers_1.filterPools;
+    },
+});
+Object.defineProperty(exports, 'sortPoolsMostLiquid', {
+    enumerable: true,
+    get: function() {
+        return helpers_1.sortPoolsMostLiquid;
+    },
+});
+Object.defineProperty(exports, 'getMarketSpotPrice', {
+    enumerable: true,
+    get: function() {
+        return helpers_1.getMarketSpotPrice;
+    },
+});
 var multicall_1 = require('./multicall');
-exports.getAllPoolDataOnChain = multicall_1.getAllPoolDataOnChain;
+Object.defineProperty(exports, 'getAllPoolDataOnChain', {
+    enumerable: true,
+    get: function() {
+        return multicall_1.getAllPoolDataOnChain;
+    },
+});
 const bmath = __importStar(require('./bmath'));
 exports.bmath = bmath;
 var costToken_1 = require('./costToken');
-exports.getCostOutputToken = costToken_1.getCostOutputToken;
+Object.defineProperty(exports, 'getCostOutputToken', {
+    enumerable: true,
+    get: function() {
+        return costToken_1.getCostOutputToken;
+    },
+});
 var pools_1 = require('./pools');
-exports.POOLS = pools_1.POOLS;
+Object.defineProperty(exports, 'POOLS', {
+    enumerable: true,
+    get: function() {
+        return pools_1.POOLS;
+    },
+});
 var wrapper_1 = require('./wrapper');
-exports.SOR = wrapper_1.SOR;
+Object.defineProperty(exports, 'SOR', {
+    enumerable: true,
+    get: function() {
+        return wrapper_1.SOR;
+    },
+});

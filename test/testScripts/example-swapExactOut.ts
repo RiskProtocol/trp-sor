@@ -2,7 +2,7 @@
 require('dotenv').config();
 const sor = require('../../src');
 const BigNumber = require('bignumber.js');
-import { JsonRpcProvider } from '@ethersproject/providers';
+import { JsonRpcProvider } from 'ethers';
 
 const provider = new JsonRpcProvider(
     `https://mainnet.infura.io/v3/${process.env.INFURA}` // If running this example make sure you have a .env file saved in root DIR with INFURA=your_key

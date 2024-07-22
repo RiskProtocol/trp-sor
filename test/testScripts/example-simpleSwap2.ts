@@ -2,7 +2,7 @@
 require('dotenv').config();
 const sor = require('../../src');
 import { BigNumber } from 'bignumber.js';
-import { JsonRpcProvider } from '@ethersproject/providers';
+import { JsonRpcProvider } from 'ethers';
 
 const R2 = '0x177bf72d4ad8ebd0a2ce23180fed33b94b5ccc25';
 const R1 = '0x4b9420e43a9aa972b64bb3ba3b3b56e8aed508de'; // USDC Address

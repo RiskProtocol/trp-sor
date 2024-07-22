@@ -2,7 +2,7 @@
 require('dotenv').config();
 const sor = require('../../src');
 import { BigNumber } from 'bignumber.js';
-import { JsonRpcProvider } from '@ethersproject/providers';
+import { JsonRpcProvider } from 'ethers';
 
 const WETH = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
 const DAI = '0x6B175474E89094C44Da98b954EedeAC495271d0F'; // DAI Address

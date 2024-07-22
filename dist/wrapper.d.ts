@@ -1,4 +1,4 @@
-import { BaseProvider } from '@ethersproject/providers';
+import { Provider } from 'ethers';
 import { BigNumber } from './utils/bignumber';
 import {
     SubGraphPools,
@@ -9,7 +9,7 @@ import {
     Pools,
 } from './types';
 export declare class SOR {
-    provider: BaseProvider;
+    provider: Provider;
     gasPrice: BigNumber;
     maxPools: number;
     chainId: number;
@@ -25,7 +25,7 @@ export declare class SOR {
         [chainId: number]: string;
     };
     constructor(
-        Provider: BaseProvider,
+        Provider: Provider,
         GasPrice: BigNumber,
         MaxPools: number,
         ChainId: number,

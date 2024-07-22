@@ -1,7 +1,7 @@
-import { BaseProvider } from '@ethersproject/providers';
+import { Provider } from 'ethers';
 import { Pools, SubGraphPools } from './types';
 export declare function getAllPoolDataOnChain(
     pools: SubGraphPools,
     multiAddress: string,
-    provider: BaseProvider
+    provider: Provider
 ): Promise<Pools>;

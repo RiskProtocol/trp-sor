@@ -1,5 +1,6 @@
 import { BigNumber } from './utils/bignumber';
-import { getAddress } from '@ethersproject/address';
+// import { getAddress } from '@ethersproject/address';
+import { getAddress } from 'ethers';
 import {
     PoolPairData,
     Path,

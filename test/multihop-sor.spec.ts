@@ -13,7 +13,7 @@ import {
     alterPools,
 } from './utils';
 import { BONE } from '../src/bmath';
-import { formatEther } from '@ethersproject/units';
+import { formatEther } from 'ethers';
 import { getTokenPairsMultiHop } from './utils';
 
 const allPools = require('./allPools.json');

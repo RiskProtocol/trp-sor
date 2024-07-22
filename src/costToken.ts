@@ -1,7 +1,8 @@
 import { getCreate2Address } from '@ethersproject/address';
-import { Contract } from '@ethersproject/contracts';
-import { BaseProvider } from '@ethersproject/providers';
-import { keccak256, pack } from '@ethersproject/solidity';
+// import { Contract } from '@ethersproject/contracts';
+// import { BaseProvider } from '@ethersproject/providers';
+import { Provider, Signer, Contract, keccak256, solidityPacked } from 'ethers';
+// import {  pack } from '@ethersproject/solidity';
 import { BigNumber } from './utils/bignumber';
 import { BONE } from './bmath';
 
@@ -18,8 +19,7 @@ export function getAddress(tokenA: string, tokenB: string): string {
     let address = getCreate2Address(
         FACTORY_ADDRESS,
         keccak256(
-            ['bytes'],
-            [pack(['address', 'address'], [tokens[0], tokens[1]])]
+            solidityPacked(['address', 'address'], [tokens[0], tokens[1]])
         ),
         INIT_CODE_HASH
     );
@@ -29,7 +29,7 @@ export function getAddress(tokenA: string, tokenB: string): string {
 
 export async function getOnChainReserves(
     PairAddr: string,
-    provider: BaseProvider
+    provider: Provider | Signer
 ): Promise<any[]> {
     const uniswapV2PairAbi = require('./abi/UniswapV2Pair.json');
 
@@ -42,7 +42,7 @@ export async function getOnChainReserves(
 
 export async function getTokenWeiPrice(
     TokenAddr: string,
-    provider: BaseProvider
+    provider: Provider
 ): Promise<BigNumber> {
     const WETH = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
     if (TokenAddr.toLowerCase() === WETH.toLowerCase())
@@ -72,12 +72,12 @@ export async function getCostOutputToken(
     TokenAddr: string,
     GasPriceWei: BigNumber,
     SwapGasCost: BigNumber,
-    Provider: BaseProvider,
+    Provider: Provider,
     ChainId: number = undefined
 ): Promise<BigNumber> {
     if (!ChainId) {
         let network = await Provider.getNetwork();
-        ChainId = network.chainId;
+        ChainId = Number(network.chainId);
     }
     // If not mainnet return 0 as UniSwap price unlikely to be correct?
     // Provider can be used to fetch token data (i.e. Decimals) via UniSwap SDK when Ethers V5 is used
